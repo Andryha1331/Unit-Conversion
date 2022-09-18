@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit conversion</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="convervion-main">
+      <div class="conversion-input-container">
+        <p class="conversion-input-container__label">Metric/Imperial Unit Conversion</p>
+
+        <input type="text" class="conversion-input-container__input">
+
+        <button class="conversion-input-container-button">Convert</button>
+      </div>
+
+      <div class="conversion-view-container">
+        <ul class="conversion-view-items">
+          <li class="conversion-view-items__item">
+            <p class="conversion-view-items__item__label">Length (Meter/Feet)</p>
+
+            <p class="conversion-view-items__item__view" data-conversion="3.281" data-unitfirst="Meter"
+              data-unitsecond="Feet"></p>
+          </li>
+
+          <li class="conversion-view-items__item">
+            <p class="conversion-view-items__item__label">Volume (Liters/Gallons)</p>
+
+            <p class="conversion-view-items__item__view" data-conversion="0.264" data-unitfirst="Liters"
+              data-unitsecond="Gallons"></p>
+          </li>
+
+          <li class="conversion-view-items__item">
+            <p class="conversion-view-items__item__label">Mass (Kilograms/Pounds)</p>
+
+            <p class="conversion-view-items__item__view" data-conversion="2.204" data-unitfirst="Kilograms"
+              data-unitsecond="Pounds"></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MIN_VALUE_CONVERT = 0;
+    const MAX_VALUE_CONVERT = 1000000000;
+
+    const CHARACTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", ""];
+
+    document.querySelector('.conversion-input-container-button').addEventListener('click', function (event) {
+      const conversionValue = document.querySelector(".conversion-input-container__input");
+      const conversionValueNumber = Number(conversionValue.value);
+      const characterCount = conversionValue.value.length;
+
+      if (!conversionValue.value) {
+        return alert('Enter value to convert!');
+      }
+
+      for (let i = 0; i <= characterCount; i++) {
+        let valueTemp = conversionValue.value.substr(i, 1);
+
+        if (!CHARACTERS.includes(valueTemp)) {
+          return alert('Enter only number as value to convert!');
+        }
+
+      }
+
+      if (!(conversionValueNumber >= MIN_VALUE_CONVERT && conversionValueNumber <= MAX_VALUE_CONVERT)) {
+        return alert('Enter value to convert in range between 1 and 1000000000!');
+      }
+
+      document.querySelectorAll('.conversion-view-items__item__view').forEach(element => {
+        const conversionCoef = element.dataset.conversion;
+        const conversionUnitFirst = element.dataset.unitfirst;
+        const conversionUnitSecond = element.dataset.unitsecond;
+        const conversionCoefNumber = Number(conversionCoef);
+
+        const conversionValueTemp = conversionValueNumber * conversionCoefNumber;
+        const conversionValueTempReverse = conversionValueNumber * 1 / conversionCoefNumber;
+
+        element.innerText = conversionValueNumber + ' ' + conversionUnitFirst + ' = ' + conversionValueTemp.toFixed(3) + ' ' + conversionUnitSecond + ' | ' + conversionValueNumber + ' ' + conversionUnitSecond + ' = ' + conversionValueTempReverse.toFixed(3) + ' ' + conversionUnitFirst;
+      })
+    })
+  </script>
+</body>
+
+</html>
